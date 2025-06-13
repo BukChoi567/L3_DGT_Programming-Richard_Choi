@@ -30,10 +30,11 @@ public class DragShoot : MonoBehaviour
         lr = GetComponent<LineRenderer>();
         
         rb.gravityScale = 0;
+        rb.linearDamping = 2f;
         lr.positionCount = 0;
 
         lr.startWidth = 0.5f;
-        lr.endWidth = 0f;
+        lr.endWidth = 0.1f;
 
         // Create input actions in code
         pointerAction = new InputAction(type: InputActionType.Value, binding: "<Pointer>/position");
@@ -74,7 +75,7 @@ public class DragShoot : MonoBehaviour
 
     void UpdateLine(Vector2 start, Vector2 end)
     {
-        Vector2 direction = end - start;
+        Vector2 direction = start - end;
         float distance = Mathf.Min(direction.magnitude, maxDragDistance);
         Vector2 clampedEnd = start + direction.normalized * distance;
 
