@@ -4,13 +4,20 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody2D), typeof(LineRenderer))]
 public class DragShoot : MonoBehaviour
 {
+    
     private Rigidbody2D rb;
     private LineRenderer lr;
+    private SpriteRenderer sr;
     private Vector2 dragStartPos;
     private bool isDragging = false;
+    private bool hasShot = false;
+    private bool isVisible = false;
+    private bool waitingToReappear = false;
 
     [Header("Force Settings")]
+    // max distance the object can be dragged
     public float maxDragDistance = 3f;
+    // multiplier for the force applied when shooting
     public float forceMultiplier = 500f;
 
     private InputAction pointerAction;
