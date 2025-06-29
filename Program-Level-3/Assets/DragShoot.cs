@@ -25,8 +25,9 @@ public class DragShoot : MonoBehaviour
 
     void Start()
     {
-
-
+        sr = GetComponent<SpriteRenderer>();
+        // Sprite to be invisible initially
+        sr.enabled = false;
 
         lr.startColor = new Color(1f, 1f, 1f, 1f);
         lr.endColor = new Color(1f, 1f, 1f, 0f);
@@ -35,7 +36,9 @@ public class DragShoot : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         lr = GetComponent<LineRenderer>();
-        
+        sr = GetComponent<SpriteRenderer>();
+
+        // Set variables
         rb.gravityScale = 0;
         rb.linearDamping = 2f;
         lr.positionCount = 0;
@@ -61,25 +64,54 @@ public class DragShoot : MonoBehaviour
     {
         Vector2 pointerPos = Camera.main.ScreenToWorldPoint(pointerAction.ReadValue<Vector2>());
 
-        
+        // If ball is not visible and not waiting to reappear, allow ball to reappear on click
+        if (!isVisible && !waitingToReappear && clickAction.WasPressedThisFrame())
+        {
+            transform.position = pointerPos;
+            sr.enabled = true;
+            isVisible = true;
+            hasShot = false;
+            rb.linearVelocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+            rb.gravityScale = 0;
+            rb.bodyType = RigidbodyType2D.Dynamic;
+        }
 
-        if (clickAction.WasPressedThisFrame())
+        if (isVisible && !hasShot)
         {
-            dragStartPos = pointerPos;
-            isDragging = true;
+            if (clickAction.WasPressedThisFrame())
+            {
+                dragStartPos = pointerPos;
+                isDragging = true;
+            }
+            else if (clickAction.IsPressed() && isDragging)
+            {
+                UpdateLine(dragStartPos, pointerPos);
+            }
+            else if (clickAction.WasReleasedThisFrame() && isDragging)
+            {
+                Shoot(dragStartPos, pointerPos);
+                lr.positionCount = 0;
+                isDragging = false;
+                hasShot = true;
+            }
         }
-        else if (clickAction.IsPressed() && isDragging)
+
+        if (isVisible && hasShot && rb.linearVelocity.magnitude < 0.001f && !waitingToReappear)
         {
-            UpdateLine(dragStartPos, pointerPos);
-        }
-        else if (clickAction.WasReleasedThisFrame() && isDragging)
-        {
-            Shoot(dragStartPos, pointerPos);
-            lr.positionCount = 0;
-            isDragging = false;
+            // If ball not moving and has been shot, wait for 0.5s before making it invisible
+            waitingToReappear = true;
+            Invoke(nameof(HideSprite), 2f);
         }
     }
 
+    void HideSprite()
+    {
+        sr.enabled = false;
+        isVisible = false;
+        waitingToReappear = false;
+        rb.bodyType = RigidbodyType2D.Kinematic; // No physics till respawn
+    }
     void UpdateLine(Vector2 start, Vector2 end)
     {
         Vector2 direction = start - end;
