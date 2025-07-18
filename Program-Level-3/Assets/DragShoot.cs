@@ -29,20 +29,20 @@ public class DragShoot : MonoBehaviour
         // Sprite to be invisible initially
         sr.enabled = false;
 
-        lr.startColor = new Color(1f, 1f, 1f, 1f);
-        lr.endColor = new Color(1f, 1f, 1f, 0f);
-    }
-    void Awake()
-    {
         rb = GetComponent<Rigidbody2D>();
+        dragStartPos = transform.position;
+        rb.bodyType = RigidbodyType2D.Kinematic; // No physics till respawn
         lr = GetComponent<LineRenderer>();
         sr = GetComponent<SpriteRenderer>();
+
+        lr.startColor = new Color(1f, 1f, 1f, 1f);
+        lr.endColor = new Color(1f, 1f, 1f, 0f);
 
         // Set variables
         rb.gravityScale = 0;
         rb.linearDamping = 2f;
-        lr.positionCount = 0;
 
+        lr.positionCount = 0;
         lr.startWidth = 0.5f;
         lr.endWidth = 0.1f;
 
@@ -52,8 +52,30 @@ public class DragShoot : MonoBehaviour
 
         pointerAction.Enable();
         clickAction.Enable();
+
+        
+    }
+    void Awake()
+    {
+        
+        
     }
 
+    public void ResetBall()
+    {
+        // Reset ball position and state
+        transform.position = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+        rb.gravityScale = 0;
+        rb.bodyType = RigidbodyType2D.Kinematic; // No physics till respawn
+        sr.enabled = false; // Hide sprite
+        isVisible = false;
+        hasShot = false;
+        waitingToReappear = false;
+
+        transform.position = dragStartPos;
+    }
     void OnDestroy()
     {
         pointerAction.Disable();
@@ -73,6 +95,7 @@ public class DragShoot : MonoBehaviour
             hasShot = false;
             rb.linearVelocity = Vector2.zero;
             rb.angularVelocity = 0f;
+            // Disable gravity
             rb.gravityScale = 0;
             rb.bodyType = RigidbodyType2D.Dynamic;
         }
