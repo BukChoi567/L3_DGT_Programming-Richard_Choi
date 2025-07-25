@@ -12,10 +12,15 @@ public class Target : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Ball"))
         {
-            isHit = true;
-            gameObject.SetActive(false);
-
-            LevelManager.Instance.TargetHit(); // tell LevelManager that a target been hit
+            DragShoot ball = collision.gameObject.GetComponent<DragShoot>();
+            if (ball != null && ball.hasShot)
+            {
+                isHit = true;
+                gameObject.SetActive(false);
+                
+                LevelManager.Instance.TargetHit(); // tell LevelManager that a target been hit
+            }
+            
         }
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created

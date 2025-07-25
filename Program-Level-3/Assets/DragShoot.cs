@@ -10,7 +10,7 @@ public class DragShoot : MonoBehaviour
     private SpriteRenderer sr;
     private Vector2 dragStartPos;
     private bool isDragging = false;
-    private bool hasShot = false;
+    public bool hasShot = false;
     private bool isVisible = false;
     private bool waitingToReappear = false;
 
