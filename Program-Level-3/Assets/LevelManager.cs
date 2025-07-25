@@ -25,7 +25,7 @@ public class LevelManager : MonoBehaviour
     {
         if (AllTargetsCleared())
         {
-            Debug.Log("Level done");
+            print("Level done");
 
         }
     }
@@ -62,6 +62,6 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+    
     }
 }

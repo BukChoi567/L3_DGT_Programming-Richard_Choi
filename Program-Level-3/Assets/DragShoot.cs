@@ -55,16 +55,10 @@ public class DragShoot : MonoBehaviour
 
         
     }
-    void Awake()
-    {
-        
-        
-    }
 
     public void ResetBall()
     {
         // Reset ball position and state
-        transform.position = Vector2.zero;
         rb.linearVelocity = Vector2.zero;
         rb.angularVelocity = 0f;
         rb.gravityScale = 0;
@@ -73,7 +67,6 @@ public class DragShoot : MonoBehaviour
         isVisible = false;
         hasShot = false;
         waitingToReappear = false;
-
         transform.position = dragStartPos;
     }
     void OnDestroy()
@@ -120,20 +113,17 @@ public class DragShoot : MonoBehaviour
             }
         }
 
-        if (isVisible && hasShot && rb.linearVelocity.magnitude < 0.001f && !waitingToReappear)
+        if (isVisible && hasShot && rb.linearVelocity.magnitude < 0.00001f && !waitingToReappear)
         {
             // If ball not moving and has been shot, wait for 0.5s before making it invisible
             waitingToReappear = true;
-            Invoke(nameof(HideSprite), 2f);
+            Invoke(nameof(Reset), 3f);
         }
     }
 
-    void HideSprite()
+    void Reset()
     {
-        sr.enabled = false;
-        isVisible = false;
-        waitingToReappear = false;
-        rb.bodyType = RigidbodyType2D.Kinematic; // No physics till respawn
+        LevelManager.Instance.ResetLevel(); // Reset level when ball stops moving
     }
     void UpdateLine(Vector2 start, Vector2 end)
     {
