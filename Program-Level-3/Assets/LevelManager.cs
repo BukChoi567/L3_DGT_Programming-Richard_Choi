@@ -1,10 +1,12 @@
 using UnityEngine;
-
+using UnityEngine.UI;
+using UnityEngine.InputSystem;
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance;
 
     private Target[] targets;
+    public Canvas FinishMenu;
 
     private void Awake()
     {
@@ -25,7 +27,14 @@ public class LevelManager : MonoBehaviour
     {
         if (AllTargetsCleared())
         {
-            print("Level done");
+            FinishMenu.gameObject.SetActive(true); // Show finish menu
+            Debug.Log("All targets cleared!");
+            
+            // Here you can add logic for what happens when all targets are hit, e.g., load next level, show UI, etc.
+            // For example:
+            // SceneManager.LoadScene("NextLevel");
+            // or
+            // ShowWinUI();
 
         }
     }
