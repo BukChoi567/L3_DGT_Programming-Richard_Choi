@@ -12,7 +12,7 @@ public class DragShoot : MonoBehaviour
     private bool isDragging = false;
     public bool hasShot = false;
     private bool isVisible = false;
-    private bool waitingToReappear = false;
+    public bool waitingToReappear = false;
 
     [Header("Force Settings")]
     // max distance the object can be dragged
@@ -67,7 +67,7 @@ public class DragShoot : MonoBehaviour
         isVisible = false;
         hasShot = false;
         waitingToReappear = false;
-        transform.position = dragStartPos;
+        transform.position = new Vector2(100f, 100f);   
     }
     void OnDestroy()
     {
