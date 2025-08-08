@@ -11,7 +11,7 @@ public class DragShoot : MonoBehaviour
     private Vector2 dragStartPos;
     private bool isDragging = false;
     public bool hasShot = false;
-    private bool isVisible = false;
+    public bool isVisible = false;
     public bool waitingToReappear = false;
 
     [Header("Force Settings")]

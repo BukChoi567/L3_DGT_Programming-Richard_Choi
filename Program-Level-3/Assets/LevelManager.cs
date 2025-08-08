@@ -6,11 +6,11 @@ using UnityEngine.SceneManagement;
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance;
-
+    private DragShoot ball;
     private Target[] targets;
     public Canvas FinishMenu;
 
-
+    public GameObject Circle;
 
     public void NextLevel(int sceneIndex)
     {
@@ -37,20 +37,19 @@ public class LevelManager : MonoBehaviour
     public void TargetHit()
     {
 
-
         if (AllTargetsCleared())
         {
-            FinishMenu.gameObject.SetActive(true); // Show finish menu
-            Debug.Log("All targets cleared!");
-            Time.timeScale = 0f; // Stop time to pause the game
-
-            // Here you can add logic for what happens when all targets are hit, e.g., load next level, show UI, etc.
-            // For example:
-            // SceneManager.LoadScene("NextLevel");
-            // or
-            // ShowWinUI();
+            Invoke(nameof(LevelFinish), 2f); // Wait for a moment before finishing the level  
 
         }
+    }
+
+    private void LevelFinish()
+    {
+        Circle.SetActive(false); //Hide circle
+        FinishMenu.gameObject.SetActive(true); // Show finish menu
+        Time.timeScale = 0f; // Stop time to pause the game
+        
     }
 
     private bool AllTargetsCleared()
