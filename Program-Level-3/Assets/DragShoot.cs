@@ -1,18 +1,21 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(LineRenderer))]
 public class DragShoot : MonoBehaviour
 {
     
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     private LineRenderer lr;
     private SpriteRenderer sr;
     private Vector2 dragStartPos;
+    public Hit_Animation animate;
+
     private bool isDragging = false;
     public bool hasShot = false;
     public bool isVisible = false;
     public bool waitingToReappear = false;
+
+    public bool HasTouchedBad = false;
 
     [Header("Force Settings")]
     // max distance the object can be dragged
@@ -28,6 +31,8 @@ public class DragShoot : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         // Sprite to be invisible initially
         sr.enabled = false;
+
+        animate = GetComponent<Hit_Animation>();
 
         rb = GetComponent<Rigidbody2D>();
         dragStartPos = transform.position;
@@ -52,13 +57,17 @@ public class DragShoot : MonoBehaviour
 
         pointerAction.Enable();
         clickAction.Enable();
-
         
     }
 
+    public void Animate()
+    {
+        animate.Animate(1f, 0.5f); // Play hit animation, x2 size and 1 sec 
+    }
     public void ResetBall()
     {
         // Reset ball position and state
+
         rb.linearVelocity = Vector2.zero;
         rb.angularVelocity = 0f;
         rb.gravityScale = 0;
@@ -67,7 +76,8 @@ public class DragShoot : MonoBehaviour
         isVisible = false;
         hasShot = false;
         waitingToReappear = false;
-        transform.position = new Vector2(100f, 100f);   
+        transform.position = new Vector2(100f, 100f);
+        animate.ResetAnimation(); // Reset animation
     }
     void OnDestroy()
     {
@@ -117,11 +127,13 @@ public class DragShoot : MonoBehaviour
         {
             // If ball not moving and has been shot, wait for 0.5s before making it invisible
             waitingToReappear = true;
+
             Invoke(nameof(Reset), 3f);
         }
+
     }
 
-    void Reset()
+    public void Reset()
     {
         LevelManager.Instance.ResetLevel(); // Reset level when ball stops moving
     }
