@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,11 +12,13 @@ public class DragShoot : MonoBehaviour
     public Hit_Animation animate;
 
     private bool isDragging = false;
+    private float stillTime = 0f;
     public bool hasShot = false;
     public bool isVisible = false;
     public bool waitingToReappear = false;
-
     public bool HasTouchedBad = false;
+
+
 
     [Header("Force Settings")]
     // max distance the object can be dragged
@@ -76,6 +79,7 @@ public class DragShoot : MonoBehaviour
         isVisible = false;
         hasShot = false;
         waitingToReappear = false;
+        HasTouchedBad = false;
         transform.position = new Vector2(100f, 100f);
         animate.ResetAnimation(); // Reset animation
     }
@@ -122,20 +126,54 @@ public class DragShoot : MonoBehaviour
                 hasShot = true;
             }
         }
-
-        if (isVisible && hasShot && rb.linearVelocity.magnitude < 0.00001f && !waitingToReappear)
+        if (isVisible && hasShot && !HasTouchedBad && !waitingToReappear)
         {
-            // If ball not moving and has been shot, wait for 0.5s before making it invisible
-            waitingToReappear = true;
+            if (rb.linearVelocity.magnitude < 0.01f)
+            {
+                stillTime += Time.deltaTime;
+            }
+            else
+            {
+                stillTime = 0f; // Reset still time if ball is moving
+            }
 
-            Invoke(nameof(Reset), 3f);
+            if (stillTime > 0.3)
+            {
+                // If ball not moving and has been shot, wait for 0.5s before making it invisible
+                waitingToReappear = true;
+                Debug.Log("Ball stopped moving, will reset in 1");
+                stillTime = 0f;
+                Animate();
+                Invoke(nameof(Reset), 1f);
+            }
         }
+        
 
     }
+    
+    
 
     public void Reset()
     {
+
         LevelManager.Instance.ResetLevel(); // Reset level when ball stops moving
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Bad"))
+        {
+            if (isVisible == true && hasShot == true)
+            {
+                HasTouchedBad = true;
+                Debug.Log("HasTouchedBad set to TRUE");
+                rb.linearVelocity = Vector2.zero; // Stop ball movement
+                Animate();
+                waitingToReappear = true;
+                Invoke(nameof(Reset), 2f);
+
+            }
+        }
     }
     void UpdateLine(Vector2 start, Vector2 end)
     {

@@ -9,7 +9,6 @@ public class LevelManager : MonoBehaviour
     private Target[] targets;
     public Canvas FinishMenu;
 
-    private BadBlock bad;
     public GameObject Circle;
 
     public void NextLevel(int sceneIndex)
@@ -88,8 +87,9 @@ public class LevelManager : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null; // Wait for the next frame
         }
-        bad = FindFirstObjectByType<BadBlock>();
-        if (bad.HasTouchedBad == false)
+        DragShoot ball = FindFirstObjectByType<DragShoot>();
+        Debug.Log("Bad Block touched: " + ball.HasTouchedBad);
+        if (ball.HasTouchedBad == false)
         {
             LevelFinish(); // Finish the level
         }

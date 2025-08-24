@@ -13,10 +13,9 @@ GameObject:
   - component: {fileID: 1443662025969732166}
   - component: {fileID: 5509044597971788663}
   - component: {fileID: -47789899012192782}
-  - component: {fileID: 2529572773410811212}
   m_Layer: 0
   m_Name: Bad
-  m_TagString: Untagged
+  m_TagString: Bad
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -81,7 +80,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: fd3226fdbe65db445a789133dfc727d5, type: 3}
-  m_Color: {r: 0.735849, g: 0.0541473, b: 0.0541473, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -216,17 +215,3 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
---- !u!114 &2529572773410811212
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3189674829499804196}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba8266912edbd5849b954801b22652f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  eliminated: 0
-  HasTouchedBad: 0
