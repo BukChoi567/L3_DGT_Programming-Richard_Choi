@@ -10,21 +10,22 @@ public class DragShoot : MonoBehaviour
     private SpriteRenderer sr;
     private Vector2 dragStartPos;
     public Hit_Animation animate;
-
+    private LevelManager levelManager;
     private bool isDragging = false;
     private float stillTime = 0f;
     public bool hasShot = false;
     public bool isVisible = false;
     public bool waitingToReappear = false;
     public bool HasTouchedBad = false;
+    
 
 
 
     [Header("Force Settings")]
     // max distance the object can be dragged
-    public float maxDragDistance = 3f;
+    private float maxDragDistance = 2.5f;
     // multiplier for the force applied when shooting
-    public float forceMultiplier = 0f;
+    private float forceMultiplier = 600f;
 
     private InputAction pointerAction;
     private InputAction clickAction;
@@ -49,7 +50,7 @@ public class DragShoot : MonoBehaviour
 
         // Set variables
         rb.gravityScale = 0;
-        rb.linearDamping = 1.5f;
+        rb.linearDamping = 1.3f;
         rb.mass = 1f;
         lr.positionCount = 0;
         lr.startWidth = 0.5f;
@@ -127,9 +128,10 @@ public class DragShoot : MonoBehaviour
                 hasShot = true;
             }
         }
-        if (isVisible && hasShot && !HasTouchedBad && !waitingToReappear)
+        levelManager = FindAnyObjectByType<LevelManager>();
+        if (isVisible && hasShot && !HasTouchedBad && !waitingToReappear && !levelManager.AllTargetsCleared())
         {
-            if (rb.linearVelocity.magnitude < 0.01f)
+            if (rb.linearVelocity.magnitude < 0.02f)
             {
                 stillTime += Time.deltaTime;
             }
@@ -191,7 +193,10 @@ public class DragShoot : MonoBehaviour
     {
         Vector2 direction = start - end;
         float distance = Mathf.Min(direction.magnitude, maxDragDistance);
-        Vector2 force = direction.normalized * distance * forceMultiplier * 0.7f;
+        Debug.Log("Shooting with distance: " + distance);
+        Debug.Log("Force Multiplier: " + forceMultiplier);
+        Debug.Log("Calculated Force: " + (direction.normalized * distance * forceMultiplier));
+        Vector2 force = direction.normalized * distance * forceMultiplier;
 
         rb.linearVelocity = Vector2.zero;
         rb.AddForce(force);

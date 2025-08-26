@@ -51,7 +51,7 @@ public class LevelManager : MonoBehaviour
         
     }
 
-    private bool AllTargetsCleared()
+    public bool AllTargetsCleared()
     {
         foreach (Target t in targets)
         {
