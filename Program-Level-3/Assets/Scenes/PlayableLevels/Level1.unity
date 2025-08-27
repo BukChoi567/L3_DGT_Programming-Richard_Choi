@@ -399,8 +399,6 @@ MonoBehaviour:
   isVisible: 0
   waitingToReappear: 0
   HasTouchedBad: 0
-  maxDragDistance: 3
-  forceMultiplier: 500
 --- !u!120 &274393268
 LineRenderer:
   serializedVersion: 2
@@ -6011,7 +6009,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!43 &1468425624
+--- !u!43 &1446168381
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
