@@ -17,6 +17,7 @@ public class DragShoot : MonoBehaviour
     public bool isVisible = false;
     public bool waitingToReappear = false;
     public bool HasTouchedBad = false;
+    public bool HasReset = false;
     
 
 
@@ -82,6 +83,7 @@ public class DragShoot : MonoBehaviour
         hasShot = false;
         waitingToReappear = false;
         HasTouchedBad = false;
+        HasReset = false;
         transform.position = new Vector2(100f, 100f);
         animate.ResetAnimation(); // Reset animation
     }
@@ -96,7 +98,7 @@ public class DragShoot : MonoBehaviour
         Vector2 pointerPos = Camera.main.ScreenToWorldPoint(pointerAction.ReadValue<Vector2>());
 
         // If ball is not visible and not waiting to reappear, allow ball to reappear on click
-        if (!isVisible && !waitingToReappear && clickAction.WasPressedThisFrame())
+        if (!isVisible && !waitingToReappear && clickAction.WasPressedThisFrame() && (pointerPos.y < 4.3f || pointerPos.x < 2.2f))
         {
             transform.position = pointerPos;
             sr.enabled = true;
@@ -131,23 +133,34 @@ public class DragShoot : MonoBehaviour
         levelManager = FindAnyObjectByType<LevelManager>();
         if (isVisible && hasShot && !HasTouchedBad && !waitingToReappear && !levelManager.AllTargetsCleared())
         {
-            if (rb.linearVelocity.magnitude < 0.02f)
+            Vector3 currentPosition = transform.position;
+            if (currentPosition.y < -6f || currentPosition.y > 6f || currentPosition.x < -4f || currentPosition.x > 4f)
             {
-                stillTime += Time.deltaTime;
+                Debug.Log("Ball out of play area, will reset in 1");
+                waitingToReappear = true;
+                Invoke(nameof(Reset), 1f);
             }
             else
             {
-                stillTime = 0f; // Reset still time if ball is moving
-            }
+                if (rb.linearVelocity.magnitude < 0.02f)
+                {
+                    stillTime += Time.deltaTime;
+                }
+                else
+                {
+                    stillTime = 0f; // Reset still time if ball is moving
+                }
 
-            if (stillTime > 0.3)
-            {
-                // If ball not moving and has been shot, wait for 0.5s before making it invisible
-                waitingToReappear = true;
-                Debug.Log("Ball stopped moving, will reset in 1");
-                stillTime = 0f;
-                Animate();
-                Invoke(nameof(Reset), 1f);
+                if (stillTime > 0.3)
+                {
+                    // If ball not moving and has been shot, wait for 0.5s before making it invisible
+                    waitingToReappear = true;
+                    Debug.Log("Ball stopped moving, will reset in 1");
+                    stillTime = 0f;
+                    Animate();
+
+                    Invoke(nameof(Reset), 1f);
+                }
             }
         }
         
