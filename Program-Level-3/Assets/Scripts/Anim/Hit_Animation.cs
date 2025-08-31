@@ -3,23 +3,28 @@ using UnityEngine.Rendering.Universal;
 
 public class Hit_Animation : MonoBehaviour
 {
+    // Reference to SpriteRenderer
     private SpriteRenderer spriteRenderer;
+    // Reference to Light2D for glow effect
     private Light2D ballLight;
+    // Original scale
     private Vector3 originalScale;
+    // Original light intensity
     private float originalLightIntensity;
 
     void Start()
     {
+        // Get components
         spriteRenderer = GetComponent<SpriteRenderer>();
         ballLight = GetComponentInChildren<Light2D>();
         originalScale = transform.localScale;
-
         if (ballLight != null)
         {
             originalLightIntensity = ballLight.intensity;
         }
     }
 
+    // Animate the object by scale change and fade duration
     public void Animate(float scaleMultiplier, float duration)
     {
         StopAllCoroutines();
@@ -27,6 +32,7 @@ public class Hit_Animation : MonoBehaviour
     }
 
     public void ResetAnimation()
+    // Reset to original state
     {
         StopAllCoroutines();
         transform.localScale = originalScale;
@@ -38,8 +44,10 @@ public class Hit_Animation : MonoBehaviour
         }
     }
 
+    // Coroutine to handle animation over time
     private System.Collections.IEnumerator AnimateCoroutine(float scaleMultiplier, float duration)
     {
+        // change scale and color over duration
         float elapsed = 0f;
         Vector3 startScale = transform.localScale;
         Vector3 targetScale = startScale * scaleMultiplier;
@@ -47,6 +55,7 @@ public class Hit_Animation : MonoBehaviour
         Color startColor = spriteRenderer.color;
         Color targetColor = new Color(startColor.r, startColor.g, startColor.b, 0f);
 
+        // change light intensity if light exists
         float startIntensity = ballLight != null ? ballLight.intensity : 0f;
         float targetIntensity = 0f;
 
