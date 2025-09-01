@@ -6,7 +6,7 @@ public class DragShoot : MonoBehaviour
 {
     
     public Rigidbody2D rb;
-    private LineRenderer lr; // LineRenderer to show drag direction
+    private LineRenderer lr; // lineRenderer to show drag direction
     private SpriteRenderer sr;
     private Vector2 dragStartPos;
     public Hit_Animation animate;
