@@ -101,8 +101,8 @@ public class DragShoot : MonoBehaviour
         // Get pointer position
         Vector2 pointerPos = Camera.main.ScreenToWorldPoint(pointerAction.ReadValue<Vector2>());
 
-        // If ball is not visible and not waiting to reappear and not hovering over settings, allow ball to reappear on click
-        if (!isVisible && !waitingToReappear && clickAction.WasPressedThisFrame() && (pointerPos.y < 4.3f || pointerPos.x < 2.2f))
+        // If ball is not visible and not waiting to reappear, allow ball to reappear on click
+        if (!isVisible && !waitingToReappear && clickAction.WasPressedThisFrame())
         {
             // Respawn ball at pointer position
             transform.position = pointerPos;
