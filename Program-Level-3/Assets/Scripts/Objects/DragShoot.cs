@@ -101,8 +101,8 @@ public class DragShoot : MonoBehaviour
         // Get pointer position
         Vector2 pointerPos = Camera.main.ScreenToWorldPoint(pointerAction.ReadValue<Vector2>());
 
-        // If ball is not visible and not waiting to reappear, allow ball to reappear on click
-        if (!isVisible && !waitingToReappear && clickAction.WasPressedThisFrame()) // if ball doesn't spawn where the settings button is: && (pointerPos.y < 4.3f || pointerPos.x < 2.2f)
+        // If ball is not visible and not waiting to reappear and not hovering over settings, allow ball to reappear on click
+        if (!isVisible && !waitingToReappear && clickAction.WasPressedThisFrame() && (pointerPos.y < 4.3f || pointerPos.x < 2.2f))
         {
             // Respawn ball at pointer position
             transform.position = pointerPos;
@@ -166,7 +166,6 @@ public class DragShoot : MonoBehaviour
                 {
                     // If ball has been still for more than 0.3s, reset after 1 second. 0.3 to prevent from running immediately after shooting
                     waitingToReappear = true;
-                    Debug.Log("Ball stopped moving, will reset in 1");
                     stillTime = 0f;
                     // Play animation fade out
                     Animate();
@@ -194,7 +193,6 @@ public class DragShoot : MonoBehaviour
                 audioManager = FindAnyObjectByType<AudioManager>();
                 audioManager.PlayBadHitAudio();
                 HasTouchedBad = true;
-                Debug.Log("HasTouchedBad set to TRUE");
                 rb.linearVelocity = Vector2.zero; // Stop ball movement
                 Animate();
                 waitingToReappear = true;

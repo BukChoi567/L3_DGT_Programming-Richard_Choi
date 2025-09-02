@@ -9,6 +9,7 @@ public class AudioManager : MonoBehaviour
     private AudioSource audioSource; // AudioSource component to play sounds
     
 
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Awake()
     {
@@ -29,6 +30,11 @@ public class AudioManager : MonoBehaviour
 
         int randomIndex = Random.Range(0, hitAudio.Length); // Get a random number between 0 and length of array
         audioSource.PlayOneShot(hitAudio[randomIndex]); // Play the randomly selected audio clip
+    }
+    
+    void Update()
+    {
+        
     }
     
 }
